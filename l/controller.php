@@ -21,10 +21,10 @@ abstract class Controller {
      * 构造函数,final修饰以免子类覆盖,子类需要的初始化操作可以覆盖init实现
      */
     final public function __construct() {
-        $viewEngine = Santa_App::$_settings ['view_engine'];
+        $viewEngine = App::$settings ['view_engine'];
         $this->_view = new $viewEngine ();
-        if (! ($this->_view = new $viewEngine ()) instanceof Santa_View) {
-            throw new Santa_Exception ( "$viewEngine must implements interface Santa_View" );
+        if (! ($this->_view = new $viewEngine ()) instanceof View) {
+            throw new Exception ( "$viewEngine must implements interface View" );
         }
         $this->init ();
     }
@@ -49,10 +49,8 @@ abstract class Controller {
     
     /**
      * 获取当前要执行的action方法的过滤器，使用者可根据实际情况在子类中覆盖此方法
-     * @param string $currentAction 当前action方法
-     * 返回值形式为:array('checkLogin','isChinaMobile',...)
      */
-    public function filters($currentAction = null) {
+    public function filters() {
         return array ();
     }
     
@@ -69,7 +67,7 @@ abstract class Controller {
      * @return boolean
      */
     public static function isAjax() {
-        return Santa_Context::isAjax ();
+        return Context::isAjax ();
     }
     
     /**
@@ -81,7 +79,7 @@ abstract class Controller {
     final public function __destruct() {
         try {
             $this->destroy ();
-            Santa_Context::clear ();
+            Context::clear ();
         } catch ( Exception $e ) {
         
         }

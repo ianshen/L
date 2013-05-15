@@ -15,11 +15,11 @@ class Db {
      * @param boolean $isMasterSlaves 是否使用主从式数据库池
      */
     static public function init($cnf, $isMasterSlaves) {
-        $configs = Santa_Config::get ( $cnf );
+        $configs = Config::get ( $cnf );
         if ($isMasterSlaves) {
             foreach ( $configs as $engine => $dbs ) {
                 foreach ( $dbs as $alias => $config ) {
-                    self::$_pool [$alias] = new Santa_Db_Ms ( $engine, $config );
+                    self::$_pool [$alias] = new DbMs ( $engine, $config );
                 }
             }
         } else {
@@ -39,7 +39,7 @@ class Db {
      */
     static public function pool($alias) {
         if (empty ( self::$_pool [$alias] )) {
-            throw new Santa_Exception ( 'Db alias "' . $alias . '" not exist' );
+            throw new Exception ( 'Db alias "' . $alias . '" not exist' );
         }
         return self::$_pool [$alias];
     }

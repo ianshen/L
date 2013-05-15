@@ -6,19 +6,20 @@
  */
 class Config {
     
-    public static $_config = array ();
+    public static $config = array ();
     
-    public static function loadConf($file, $dir = CONF_DIR) {
+    public static function load($file) {
+        $dir = APP . DIRECTORY_SEPARATOR . 'conf';
         $filename = $dir . DIRECTORY_SEPARATOR . $file . '.php';
         if (! is_file ( $filename )) {
-            throw new Santa_Exception ( "file $filename not exists or something" );
+            throw new Exception ( "file $filename not exists or something" );
         }
-        self::$_config [$file] = include ($filename);
+        self::$config [$file] = include ($filename);
     }
     
-    public static function get($key = null, $default = null, $dir = CONF_DIR) {
+    public static function get($key = null) {
         if (! $key) {
-            throw new Santa_Exception ( 'parameter $key is empty' );
+            throw new Exception ( 'parameter $key is empty' );
         }
         if (false !== strpos ( $key, '.' )) {
             list ( $file, $path ) = explode ( '.', $key, 2 );
@@ -26,14 +27,14 @@ class Config {
         } else {
             $file = $key;
         }
-        if (! isset ( self::$_config [$file] )) {
-            self::loadConf ( $file, $dir );
+        if (! isset ( self::$config [$file] )) {
+            self::load ( $file );
         }
-        $config = self::$_config;
+        $config = self::$config;
         $keys = explode ( '.', $key );
         foreach ( $keys as $key ) {
             if (! isset ( $config [$key] )) {
-                throw new Santa_Exception ( __FILE__ . __METHOD__ . __LINE__ . "key:{$key} is not set in config" );
+                throw new Exception ( "key:{$key} is not set in config" );
             }
             //isset("$string") bug still here
             /* if (! is_array ( $res [$key] )) {

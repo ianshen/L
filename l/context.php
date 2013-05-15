@@ -20,7 +20,7 @@ class Context {
     public static function get($key, $default = null) {
         if (! array_key_exists ( $key, self::$_data )) {
             if (null === $default) {
-                throw new Santa_Exception ( "key $key not exists in context" );
+                throw new Exception ( "key $key not exists in context" );
             } else {
                 return $default;
             }
@@ -38,7 +38,7 @@ class Context {
      */
     public static function set($key, $value) {
         if (array_key_exists ( $key, self::$_data )) {
-            throw new Santa_Exception ( "key $key already exists in context" );
+            throw new Exception ( "key $key already exists in context" );
         }
         self::$_data [$key] = $value;
     }
